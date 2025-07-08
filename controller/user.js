@@ -3,16 +3,19 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import { sendEmail } from "../config/email.js";
+import whiteList from "../models/WhiteList.js";
 
 dotenv.config({ path: "./config/.env" });
 
 // for vardaan only emails
-function emailFromVardaanFarms(email) {
-  const emailendPoint = email.split("@")[1];
-  if (emailendPoint == "vardaanfarms.com") {
-    return true;
+async function emailFromWhiteList(email) {
+  try{
+    const res = await whiteList.findOne({email});
+    return res !== null;
   }
-  return false;
+  catch(err){
+    return false;
+  }
 }
 
 // for jwt token
@@ -40,8 +43,9 @@ export const createUser = async (req, res) => {
     });
   }
 
-  // to check if email is from vardaanfarms or not
-  if (!emailFromVardaanFarms(email)) {
+  // to check if email is from whitelist or not
+  const whiteListEmail = await emailFromWhiteList(email);
+  if (whiteListEmail==false) {
     return res.status(403).json({
       success: false,
       message: "Can't make account for you",
@@ -191,20 +195,19 @@ export const resetPassword = async (req, res) => {
       message: "NO Such Email",
     });
   }
-  try{
+  try {
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password,salt);
+    const hash = bcrypt.hashSync(password, salt);
     confirmation.password = hash;
     confirmation.passwordResetOtp = "";
     confirmation.save();
     return res.status(200).json({
-      success:true,
-    })
-  }
-  catch (err){
-      return res.status(500).json({
-        success:false,
-        message:err.message,
-      })
+      success: true,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };
