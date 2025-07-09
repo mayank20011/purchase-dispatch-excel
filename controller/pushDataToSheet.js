@@ -33,3 +33,35 @@ export const sendDataToSheet = async (req, res) => {
     });
   }
 };
+
+export const sendDataToDispatchSheet = async (req, res) => {
+  const { Date, client, company, products } = req.body;
+  if(!Date || !client || !company || !products){
+    return res.status(400).json({
+      success:false,
+      message:"All Fields are required"
+    })
+  }
+ try {
+    const response = await axios.post(
+      `${process.env.DISPATCH_SHEET_URL}`,
+      { data: [{ Date, client, ...products }], sheet: company },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.status(201).json({
+      success: true,
+      message: "Created Successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: `${err.name}`,
+    });
+  }
+};
