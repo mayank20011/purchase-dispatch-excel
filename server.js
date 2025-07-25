@@ -28,9 +28,9 @@ server.get("/", (req, res) => {
   res.status(200).json({
     success: true,
     message: "hello",
-  });
+  }); 
 });
-
+ 
 connectDb()
   .then(() => {
     console.log(`Db Connected Successfully`);
