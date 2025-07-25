@@ -5,6 +5,8 @@ import connectDb from "./config/db.js";
 import cors from "cors";
 import sheetRouter from "./Routes/pushDataToSheet.js";
 import { verifyToken } from "./middleware/tokkenChecking.js";
+import SellingRouter from "./Routes/SellingTo.js";
+import purchaseRouter from "./Routes/purchaseRouter.js";
 
 dotenv.config({ path: "./config/.env" });
 
@@ -18,7 +20,9 @@ server.use(cors());
 
 // routes setup
 server.use(`/api/v1/user/`, userRouter);
+server.use(`/api/v1/purchase`, verifyToken ,purchaseRouter);
 server.use(`/api/v1/sendDataToSheet`, verifyToken ,sheetRouter);
+server.use(`/api/v1/sellingTo`, SellingRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json({
