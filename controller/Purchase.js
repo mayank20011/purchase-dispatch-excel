@@ -200,7 +200,7 @@ export const MilkPushDataToSheet = async (req, res) => {
   }
 };
 
-export const SmpPushDataToSheet = (req, res) => {
+export const SmpPushDataToSheet = async (req, res) => {
   const { Date, NumberOfBags, PurchasingFrom, Remark, Time } = req.body;
   if (!Date || !NumberOfBags || !PurchasingFrom || !Remark || !Time) {
     return res.status(400).json({
@@ -208,12 +208,88 @@ export const SmpPushDataToSheet = (req, res) => {
       message: "All Fields Are Required",
     });
   } else {
-    pushDataToGoogleSheet();
+    await pushDataToGoogleSheet(
+      process.env.OTHER_PURCHASES_SHEET_URL,
+      { Date, Time, NumberOfBags, Remark },
+      `SMP ${PurchasingFrom}`,
+      res,
+      process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
+    );
   }
 };
 
-export const PolyFilmPushDataToSheet = (req, res) => {};
-export const WoodenBlockPushDataToSheet = (req, res) => {};
-export const DieselGensetPushDataToSheet = (req, res) => {};
-export const DahiCupPushDataToSheet = (req, res) => {};
-export const DahiMatkaPushDataToSheet = (req, res) => {};
+export const PolyFilmPushDataToSheet = async (req, res) => {
+
+};
+
+export const WoodenBlockPushDataToSheet = async (req, res) => {
+  const { PurchasingFrom, Date, Time, Quantity } = req.body;
+  if (!Date || !Time || !PurchasingFrom || !Quantity) {
+    return res.status(400).json({
+      success: false,
+      message: "All Fields Are Required",
+    });
+  } else {
+    await pushDataToGoogleSheet(
+      process.env.OTHER_PURCHASES_SHEET_URL,
+      { Date, Time, Quantity },
+      `Wood ${PurchasingFrom}`,
+      res,
+      process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
+    );
+  }
+};
+
+export const DieselGensetPushDataToSheet = async (req, res) => {
+  const { PurchasingFrom, Date, Time, Quantity } = req.body;
+  if (!Date || !Time || !PurchasingFrom || !Quantity) {
+    return res.status(400).json({
+      success: false,
+      message: "All Fields Are Required",
+    });
+  } else {
+    await pushDataToGoogleSheet(
+      process.env.OTHER_PURCHASES_SHEET_URL,
+      { Date, Time, Quantity },
+      `Genset ${PurchasingFrom}`,
+      res,
+      process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
+    );
+  }
+};
+
+export const DahiCupPushDataToSheet = async (req, res) => {
+  const { PurchasingFrom, Date, Time, Quantity } = req.body;
+  if (!Date || !Time || !PurchasingFrom || !Quantity) {
+    return res.status(400).json({
+      success: false,
+      message: "All Fields Are Required",
+    });
+  } else {
+    await pushDataToGoogleSheet(
+      process.env.OTHER_PURCHASES_SHEET_URL,
+      { Date, Time, Quantity },
+      `Dahi Cup ${PurchasingFrom}`,
+      res,
+      process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
+    );
+  }
+};
+
+export const DahiMatkaPushDataToSheet = async (req, res) => {
+const { PurchasingFrom, Date, Time, Quantity } = req.body;
+  if (!Date || !Time || !PurchasingFrom || !Quantity) {
+    return res.status(400).json({
+      success: false,
+      message: "All Fields Are Required",
+    });
+  } else {
+    await pushDataToGoogleSheet(
+      process.env.OTHER_PURCHASES_SHEET_URL,
+      { Date, Time, Quantity },
+      `Dahi Matka ${PurchasingFrom}`,
+      res,
+      process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
+    );
+  }
+};
