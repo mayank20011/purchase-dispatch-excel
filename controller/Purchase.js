@@ -219,7 +219,21 @@ export const SmpPushDataToSheet = async (req, res) => {
 };
 
 export const PolyFilmPushDataToSheet = async (req, res) => {
-
+  const { PurchasingFrom, Date, Time, ...products } = req.body;
+  if (!products || !Date || !Time || !PurchasingFrom) {
+    return res.status(400).json({
+      success: false,
+      message: "All Fields Are Required",
+    });
+  } else {
+    await pushDataToGoogleSheet(
+      process.env.OTHER_PURCHASES_SHEET_URL,
+      { Date, Time, ...products },
+      `Polyfilms ${PurchasingFrom}`,
+      res,
+      process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
+    );
+  }
 };
 
 export const WoodenBlockPushDataToSheet = async (req, res) => {
@@ -277,7 +291,7 @@ export const DahiCupPushDataToSheet = async (req, res) => {
 };
 
 export const DahiMatkaPushDataToSheet = async (req, res) => {
-const { PurchasingFrom, Date, Time, Quantity } = req.body;
+  const { PurchasingFrom, Date, Time, Quantity } = req.body;
   if (!Date || !Time || !PurchasingFrom || !Quantity) {
     return res.status(400).json({
       success: false,
