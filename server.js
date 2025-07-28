@@ -5,6 +5,7 @@ import connectDb from "./config/db.js";
 import cors from "cors";
 import { verifyToken } from "./middleware/tokkenChecking.js";
 import purchaseRouter from "./Routes/purchaseRouter.js";
+import dispatchRouter from "./Routes/dispatchRouter.js";
 
 dotenv.config({ path: "./config/.env" });
 
@@ -19,7 +20,7 @@ server.use(cors());
 // routes setup
 server.use(`/api/v1/user/`, userRouter);
 server.use(`/api/v1/purchase`, verifyToken ,purchaseRouter);
-
+server.use(`/api/v1/dispatch`, verifyToken, dispatchRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json({
