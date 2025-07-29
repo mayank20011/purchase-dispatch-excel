@@ -27,6 +27,7 @@ export const dispatchPushDataToSheet = async (req, res) => {
     DriverName,
     VechileNumber,
     Time,
+    Creates,
     ...products
   } = req.body;
   if (
@@ -36,7 +37,8 @@ export const dispatchPushDataToSheet = async (req, res) => {
     !Company ||
     !DispatchTo ||
     !DriverName ||
-    !VechileNumber
+    !VechileNumber ||
+    !Creates
   ) {
     return res.status(400).json({
       success: false,
@@ -51,6 +53,7 @@ export const dispatchPushDataToSheet = async (req, res) => {
         DispatchTo,
         DriverName,
         VechileNumber,
+        Creates,
         ...products,
       },
       Company,
