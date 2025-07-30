@@ -137,7 +137,6 @@ export const MilkPushDataToSheet = async (req, res) => {
     Adulteration,
     _id
   } = req.body;
-
   if (
     !PurchasingFrom ||
     !MilkType ||
@@ -206,7 +205,7 @@ export const MilkPushDataToSheet = async (req, res) => {
 
 export const SmpPushDataToSheet = async (req, res) => {
   const { Date, NumberOfBags, PurchasingFrom, Remark, Time, _id } = req.body;
-  if (!Date || !NumberOfBags || !PurchasingFrom || !Remark || !Time || _id) {
+  if (!Date || !NumberOfBags || !PurchasingFrom || !Remark || !Time || !_id) {
     return res.status(400).json({
       success: false,
       message: "All Fields Are Required",
