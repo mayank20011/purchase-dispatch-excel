@@ -1,10 +1,10 @@
-import DispatchNames from "../models/DispatchList.js";
+import DispatchVardaanNames from "../models/DispatchList.js";
 import { pushDataToGoogleSheet } from "../config/pushDataToGoogleSheet.js";
 
 // for getting all names
-export const dispatchNameList = async (req, res) => {
+export const dispatchVardaandNameList = async (req, res) => {
   try {
-    const list = await DispatchNames.find({}, { _id: 0 });
+    const list = await DispatchVardaanNames.find({});
     res.status(201).json({
       success: true,
       data: list,
@@ -28,8 +28,10 @@ export const dispatchPushDataToSheet = async (req, res) => {
     VechileNumber,
     Time,
     Creates,
+    _id,
     ...products
   } = req.body;
+  console.log(req.body)
   if (
     !products ||
     !Date ||
@@ -38,7 +40,8 @@ export const dispatchPushDataToSheet = async (req, res) => {
     !DispatchTo ||
     !DriverName ||
     !VechileNumber ||
-    !Creates
+    !Creates ||
+    !_id
   ) {
     return res.status(400).json({
       success: false,
@@ -54,6 +57,7 @@ export const dispatchPushDataToSheet = async (req, res) => {
         DriverName,
         VechileNumber,
         Creates,
+        _id,
         ...products,
       },
       Company,

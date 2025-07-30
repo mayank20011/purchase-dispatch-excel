@@ -13,7 +13,7 @@ dotenv.config({ path: "config/.env" });
 // for getting names
 export const milkPurchasingFromList = async (req, res) => {
   try {
-    const list = await PurchsingMilkFromNameList.find({}, { _id: 0 });
+    const list = await PurchsingMilkFromNameList.find({});
     res.status(201).json({
       success: true,
       data: list,
@@ -29,7 +29,7 @@ export const milkPurchasingFromList = async (req, res) => {
 
 export const smpPurchasingFromList = async (req, res) => {
   try {
-    const list = await PurchsingSmpFromNameList.find({}, { _id: 0 });
+    const list = await PurchsingSmpFromNameList.find({});
     res.status(201).json({
       success: true,
       data: list,
@@ -46,7 +46,7 @@ export const smpPurchasingFromList = async (req, res) => {
 
 export const polyfilmPurchasingFromList = async (req, res) => {
   try {
-    const list = await PurchsingPolyFilmsFromNameList.find({}, { _id: 0 });
+    const list = await PurchsingPolyFilmsFromNameList.find({});
     res.status(201).json({
       success: true,
       data: list,
@@ -62,7 +62,7 @@ export const polyfilmPurchasingFromList = async (req, res) => {
 
 export const woodenBlockPurchasingFromList = async (req, res) => {
   try {
-    const list = await PurchsingWoodenBlockFromNameList.find({}, { _id: 0 });
+    const list = await PurchsingWoodenBlockFromNameList.find({});
     res.status(201).json({
       success: true,
       data: list,
@@ -78,7 +78,7 @@ export const woodenBlockPurchasingFromList = async (req, res) => {
 
 export const dieselGensetPurchasingFromList = async (req, res) => {
   try {
-    const list = await PurchsingDieselGensetFromNameList.find({}, { _id: 0 });
+    const list = await PurchsingDieselGensetFromNameList.find({});
     res.status(201).json({
       success: true,
       data: list,
@@ -94,7 +94,7 @@ export const dieselGensetPurchasingFromList = async (req, res) => {
 
 export const dahiCupPurchasingFromList = async (req, res) => {
   try {
-    const list = await PurchsingDahiCupFromNameList.find({}, { _id: 0 });
+    const list = await PurchsingDahiCupFromNameList.find({});
     res.status(201).json({
       success: true,
       data: list,
@@ -110,7 +110,7 @@ export const dahiCupPurchasingFromList = async (req, res) => {
 
 export const dahiMatkaPurchasingFromList = async (req, res) => {
   try {
-    const list = await PurchsingDahiMatkaFromNameList.find({}, { _id: 0 });
+    const list = await PurchsingDahiMatkaFromNameList.find({});
     res.status(201).json({
       success: true,
       data: list,
@@ -135,6 +135,7 @@ export const MilkPushDataToSheet = async (req, res) => {
     Date,
     Time,
     Adulteration,
+    _id
   } = req.body;
 
   if (
@@ -145,7 +146,8 @@ export const MilkPushDataToSheet = async (req, res) => {
     !DriverName ||
     !Date ||
     !Time ||
-    !Adulteration
+    !Adulteration ||
+    !_id
   ) {
     return res.status(400).json({
       success: false,
@@ -175,6 +177,7 @@ export const MilkPushDataToSheet = async (req, res) => {
           Fat,
           Snf,
           Volume,
+          _id
         },
         PurchasingFrom,
         res,
@@ -192,6 +195,7 @@ export const MilkPushDataToSheet = async (req, res) => {
         Date,
         Time,
         Adulteration,
+        _id
       },
       PurchasingFrom,
       res,
@@ -201,8 +205,8 @@ export const MilkPushDataToSheet = async (req, res) => {
 };
 
 export const SmpPushDataToSheet = async (req, res) => {
-  const { Date, NumberOfBags, PurchasingFrom, Remark, Time } = req.body;
-  if (!Date || !NumberOfBags || !PurchasingFrom || !Remark || !Time) {
+  const { Date, NumberOfBags, PurchasingFrom, Remark, Time, _id } = req.body;
+  if (!Date || !NumberOfBags || !PurchasingFrom || !Remark || !Time || _id) {
     return res.status(400).json({
       success: false,
       message: "All Fields Are Required",
@@ -210,7 +214,7 @@ export const SmpPushDataToSheet = async (req, res) => {
   } else {
     await pushDataToGoogleSheet(
       process.env.OTHER_PURCHASES_SHEET_URL,
-      { Date, Time, NumberOfBags, Remark },
+      { Date, Time, NumberOfBags, Remark, _id },
       `SMP ${PurchasingFrom}`,
       res,
       process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
@@ -219,8 +223,8 @@ export const SmpPushDataToSheet = async (req, res) => {
 };
 
 export const PolyFilmPushDataToSheet = async (req, res) => {
-  const { PurchasingFrom, Date, Time, ...products } = req.body;
-  if (!products || !Date || !Time || !PurchasingFrom) {
+  const { PurchasingFrom, Date, Time, _id, ...products } = req.body;
+  if (!products || !Date || !Time || !PurchasingFrom || !_id) {
     return res.status(400).json({
       success: false,
       message: "All Fields Are Required",
@@ -228,7 +232,7 @@ export const PolyFilmPushDataToSheet = async (req, res) => {
   } else {
     await pushDataToGoogleSheet(
       process.env.OTHER_PURCHASES_SHEET_URL,
-      { Date, Time, ...products },
+      { Date, Time, _id, ...products },
       `Polyfilms ${PurchasingFrom}`,
       res,
       process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
@@ -237,8 +241,8 @@ export const PolyFilmPushDataToSheet = async (req, res) => {
 };
 
 export const WoodenBlockPushDataToSheet = async (req, res) => {
-  const { PurchasingFrom, Date, Time, Quantity } = req.body;
-  if (!Date || !Time || !PurchasingFrom || !Quantity) {
+  const { PurchasingFrom, Date, Time, Quantity, _id } = req.body;
+  if (!Date || !Time || !PurchasingFrom || !Quantity || !_id) {
     return res.status(400).json({
       success: false,
       message: "All Fields Are Required",
@@ -246,7 +250,7 @@ export const WoodenBlockPushDataToSheet = async (req, res) => {
   } else {
     await pushDataToGoogleSheet(
       process.env.OTHER_PURCHASES_SHEET_URL,
-      { Date, Time, Quantity },
+      { Date, Time, Quantity, _id },
       `Wood ${PurchasingFrom}`,
       res,
       process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
@@ -255,8 +259,8 @@ export const WoodenBlockPushDataToSheet = async (req, res) => {
 };
 
 export const DieselGensetPushDataToSheet = async (req, res) => {
-  const { PurchasingFrom, Date, Time, Quantity } = req.body;
-  if (!Date || !Time || !PurchasingFrom || !Quantity) {
+  const { PurchasingFrom, Date, Time, Quantity, _id } = req.body;
+  if (!Date || !Time || !PurchasingFrom || !Quantity || !_id) {
     return res.status(400).json({
       success: false,
       message: "All Fields Are Required",
@@ -264,7 +268,7 @@ export const DieselGensetPushDataToSheet = async (req, res) => {
   } else {
     await pushDataToGoogleSheet(
       process.env.OTHER_PURCHASES_SHEET_URL,
-      { Date, Time, Quantity },
+      { Date, Time, Quantity, _id },
       `Genset ${PurchasingFrom}`,
       res,
       process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
@@ -273,8 +277,8 @@ export const DieselGensetPushDataToSheet = async (req, res) => {
 };
 
 export const DahiCupPushDataToSheet = async (req, res) => {
-  const { PurchasingFrom, Date, Time, Quantity } = req.body;
-  if (!Date || !Time || !PurchasingFrom || !Quantity) {
+  const { PurchasingFrom, Date, Time, Quantity, _id } = req.body;
+  if (!Date || !Time || !PurchasingFrom || !Quantity || !_id) {
     return res.status(400).json({
       success: false,
       message: "All Fields Are Required",
@@ -282,7 +286,7 @@ export const DahiCupPushDataToSheet = async (req, res) => {
   } else {
     await pushDataToGoogleSheet(
       process.env.OTHER_PURCHASES_SHEET_URL,
-      { Date, Time, Quantity },
+      { Date, Time, Quantity, _id },
       `Dahi Cup ${PurchasingFrom}`,
       res,
       process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN
@@ -291,8 +295,8 @@ export const DahiCupPushDataToSheet = async (req, res) => {
 };
 
 export const DahiMatkaPushDataToSheet = async (req, res) => {
-  const { PurchasingFrom, Date, Time, Quantity } = req.body;
-  if (!Date || !Time || !PurchasingFrom || !Quantity) {
+  const { PurchasingFrom, Date, Time, Quantity, _id } = req.body;
+  if (!Date || !Time || !PurchasingFrom || !Quantity || !_id) {
     return res.status(400).json({
       success: false,
       message: "All Fields Are Required",
@@ -300,7 +304,7 @@ export const DahiMatkaPushDataToSheet = async (req, res) => {
   } else {
     await pushDataToGoogleSheet(
       process.env.OTHER_PURCHASES_SHEET_URL,
-      { Date, Time, Quantity },
+      { Date, Time, Quantity, _id },
       `Dahi Matka ${PurchasingFrom}`,
       res,
       process.env.OTHER_PURCHASES_SHEET_BARER_TOKEN

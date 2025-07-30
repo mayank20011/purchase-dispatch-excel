@@ -1,12 +1,12 @@
 import { Router } from "express";
 import {
-  dispatchNameList,
+  dispatchVardaandNameList,
   dispatchPushDataToSheet,
 } from "../controller/dispatch.js";
 
 const dispatchRouter = Router();
 
-dispatchRouter.get("/get-names", dispatchNameList);
+dispatchRouter.get("/get-names/vardaan", dispatchVardaandNameList);
 dispatchRouter.post("/push-data-to-sheet", dispatchPushDataToSheet);
 
 export default dispatchRouter;

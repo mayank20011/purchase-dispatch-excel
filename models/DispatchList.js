@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Schema } from "mongoose";
 
-const dispatchCustomerNames = new Schema({
+const dispatchVardaanCustomerNames = new Schema({
   name: {
     type: {
       trim: true,
@@ -11,6 +11,9 @@ const dispatchCustomerNames = new Schema({
   },
 });
 
-const DispatchNames = mongoose.model("DispatchName", dispatchCustomerNames);
+const DispatchVardaanNames = mongoose.model(
+  "dispatchname",
+  dispatchVardaanCustomerNames
+);
 
-export default DispatchNames;
+export default DispatchVardaanNames;
