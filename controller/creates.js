@@ -1,8 +1,8 @@
 import { pushDataToGoogleSheet } from "../config/pushDataToGoogleSheet.js";
 
 export const PushCreatesDataToSheet = async (req, res) => {
-  const { name, Date, createsInward } = req.body;
-  if (!Date || !name || !createsInward) {
+  const { name, Date, createsInward, _id } = req.body;
+  if (!Date || !name || !createsInward || !_id) {
     return res.status(400).json({
       success: false,
       message: "All Fields Are Required",
@@ -14,6 +14,7 @@ export const PushCreatesDataToSheet = async (req, res) => {
         Date,
         name,
         createsInward,
+        _id,
       },
       "Creates Inward",
       res,
